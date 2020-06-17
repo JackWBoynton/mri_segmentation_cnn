@@ -8,6 +8,7 @@ import os
 def load_dicom(path: str) -> np.ndarray:
     """takes a filepath that contains DICOM image files (.dcm) and returns an h x w x n numpy array containing the pixel data"""
     
+    # initialize DICOM reader from vtk module
     reader = vtk.vtkDICOMImageReader()
     reader.SetDirectoryName(path)
     reader.Update()
