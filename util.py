@@ -14,7 +14,7 @@ def load_dicom(path: str) -> np.ndarray:
     reader.SetDirectoryName(path)
     reader.Update()
 
-    # Load dimensions using `GetDataExtent`
+    # Load dimensions
     _extent = reader.GetDataExtent()
     px_dims = [_extent[1]-_extent[0]+1, _extent[3]-_extent[2]+1, _extent[5]-_extent[4]+1]
 
@@ -26,25 +26,23 @@ def load_dicom(path: str) -> np.ndarray:
     y = np.arange(0.0, (px_dims[1]+1)*px_space[1], px_space[1])
     z = np.arange(0.0, (px_dims[2]+1)*px_space[2], px_space[2])
 
-    # Get the 'vtkImageData' object from the reader
+    # Get the image data
     img_dat = reader.GetOutput()
-    # Get the 'vtkPointData' object from the 'vtkImageData' object
+    # Get the point data
     pt_dat = img_dat.GetPointData()
-    # Ensure that only one array exists within the 'vtkPointData' object
-    assert (pt_dat.GetNumberOfArrays()==1)
-    # Get the `vtkArray` (or whatever derived type) which is needed for the `numpy_support.vtk_to_numpy` function
+    # Get the actual point data from the vtk object
     dat = pt_dat.GetArray(0)
 
-    # Convert the `vtkArray` to a NumPy array
+    # Convert the vtk to numpy array
     dicom = numpy_support.vtk_to_numpy(dat)
-    # Reshape the NumPy array to 3D using 'ConstPixelDims' as a 'shape'
+    # Reshape the numpy array to 3D using 'ConstPixelDims' as a 'shape'
     dicom = dicom.reshape(px_dims, order='F')
 
     return dicom
 
 def load_nrrd(filename: str, header: bool = False) -> np.ndarray:
     """reads a nrrd file located at filename into a numpy ndarray. if header is True, will return header information"""
-    
+
     readdata, headera = nrrd.read(filename)
     if header:
         return readdata, headera
