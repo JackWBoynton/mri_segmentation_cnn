@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io
 import os
+import nrrd
 
 def load_dicom(path: str) -> np.ndarray:
     """takes a filepath that contains DICOM image files (.dcm) and returns an h x w x n numpy array containing the pixel data"""
@@ -20,6 +21,7 @@ def load_dicom(path: str) -> np.ndarray:
     # Load spacing values
     px_space = reader.GetPixelSpacing()
 
+    # bounding axes
     x = np.arange(0.0, (px_dims[0]+1)*px_space[0], px_space[0])
     y = np.arange(0.0, (px_dims[1]+1)*px_space[1], px_space[1])
     z = np.arange(0.0, (px_dims[2]+1)*px_space[2], px_space[2])
@@ -39,3 +41,11 @@ def load_dicom(path: str) -> np.ndarray:
     dicom = dicom.reshape(px_dims, order='F')
 
     return dicom
+
+def load_nrrd(filename: str, header: bool = False) -> np.ndarray:
+    """reads a nrrd file located at filename into a numpy ndarray. if header is True, will return header information"""
+    
+    readdata, headera = nrrd.read(filename)
+    if header:
+        return readdata, headera
+    return readdata
