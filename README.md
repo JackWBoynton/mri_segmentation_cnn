@@ -1,4 +1,4 @@
-# mri_segmentation_cnn
+# Fully Convolutional Network Architecture for the Automation of MR Image Segmentation
 
 ## load data
 * .mat -> .npy ?
