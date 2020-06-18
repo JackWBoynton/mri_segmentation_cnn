@@ -18,4 +18,4 @@
 ## Issues:
 * Output format?
 * Prevent [Catastrophic Forgetting](https://en.wikipedia.org/wiki/Catastrophic_interference)
-* Keep lr `currentLearningRate = K.get_value(model.optimizer.lr)`
+* Keep lr ```python currentLearningRate = K.get_value(model.optimizer.lr)```
